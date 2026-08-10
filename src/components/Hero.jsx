@@ -1,12 +1,13 @@
+import { useContext, useState } from "react";
 import libraryImage from "../assets/library.jpg";
-import { useState } from "react";
+import { LibraryContext } from "../contexts/LibraryContext";
 import { searchBooks } from "../services/openLibrary";
 import BookCard from "./BookCard";
 
 function Hero() {
   const [searchTerm, setSearchTerm] = useState("");
   const [books, setBooks] = useState([]);
-  const [library, setLibrary] = useState([]);
+  const { library, handleAddToLibrary } = useContext(LibraryContext);
 
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
@@ -16,27 +17,6 @@ function Hero() {
     const result = await searchBooks(searchTerm);
     setBooks(result);
   }
-
-  function handleAddToLibrary(book) {
-    const isAlreadyAdded = library.some((item) => item.bookId === book.key);
-
-    if (isAlreadyAdded) {
-      return;
-    }
-
-    const libraryItem = {
-      bookId: book.key,
-      status: "want-to-read",
-      rating: null,
-      notes: "",
-      isFavorite: false,
-      addedAt: new Date().toISOString(),
-    };
-
-    setLibrary((currentLibrary) => [...currentLibrary, libraryItem]);
-  }
-
-  console.log(library);
 
   return (
     <>
@@ -88,13 +68,18 @@ function Hero() {
       </section>
 
       <section className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-6 py-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {books.map((book) => (
-          <BookCard
-            key={book.key}
-            book={book}
-            onAddToLibrary={handleAddToLibrary}
-          />
-        ))}
+        {books.map((book) => {
+          const isAdded = library.some((item) => item.bookId === book.key);
+
+          return (
+            <BookCard
+              key={book.key}
+              book={book}
+              isAdded={isAdded}
+              onAddToLibrary={handleAddToLibrary}
+            />
+          );
+        })}
       </section>
     </>
   );

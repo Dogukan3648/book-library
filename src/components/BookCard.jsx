@@ -1,6 +1,6 @@
-function BookCard({ book, onAddToLibrary }) {
+function BookCard({ book, onAddToLibrary, isAdded }) {
   return (
-    <div className="group rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
+    <div className="group flex h-full flex-col rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
       <div className="overflow-hidden rounded-lg">
         {book.cover ? (
           <img
@@ -15,18 +15,30 @@ function BookCard({ book, onAddToLibrary }) {
         )}
       </div>
 
-      <h2 className="mt-4 text-lg font-semibold text-gray-900">{book.title}</h2>
+      <div className="mb-4">
+        <h2 className="mt-4 text-lg font-semibold text-gray-900">
+          {book.title}
+        </h2>
 
-      <p className="mt-2 text-sm text-gray-600">{book.author}</p>
+        <p className="mt-2 text-sm text-gray-600">{book.author}</p>
 
-      <p className="mt-1 text-sm text-gray-500">{book.publishedYear}</p>
+        <p className="mt-1 text-sm text-gray-500">{book.publishedYear}</p>
+      </div>
 
       <button
         type="button"
         onClick={() => onAddToLibrary(book)}
-        className="mt-4 w-full rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700"
+        disabled={isAdded}
+        className="
+          mt-auto w-full rounded-lg bg-slate-900 px-4 py-2
+          text-sm font-semibold text-white transition
+          hover:bg-slate-700
+          disabled:cursor-not-allowed
+          disabled:bg-emerald-600
+          disabled:text-white
+        "
       >
-        Add to Library
+        {isAdded ? "✓ Added" : "Add to Library"}
       </button>
     </div>
   );
