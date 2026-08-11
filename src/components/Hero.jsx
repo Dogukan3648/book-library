@@ -41,8 +41,8 @@ function Hero() {
 
   return (
     <>
-      <section className="bg-slate-50 py-20 sm:py-24">
-        <div className="mx-auto max-w-7xl px-6">
+      <section className="bg-slate-50 py-14 sm:py-20 lg:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="grid items-center gap-12 md:grid-cols-2">
             <div>
               <span className="inline-block rounded-full bg-slate-200 px-3 py-1 text-sm font-medium text-slate-700">
@@ -65,7 +65,7 @@ function Hero() {
                 <input
                   type="search"
                   placeholder="Search by title or author"
-                  className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none placeholder:text-slate-400 focus:border-slate-500 focus:ring-2 focus:ring-slate-400"
+                  className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none placeholder:text-slate-400 focus:border-slate-500 focus:ring-2 focus:ring-slate-400 transition focus:ring-offset-1"
                   value={searchTerm}
                   onChange={handleChange}
                 />
@@ -79,11 +79,7 @@ function Hero() {
                   {isLoading ? "Searching..." : "Search"}
                 </button>
               </form>
-              {isLoading && (
-                <p className="mt-4 text-sm text-slate-600">
-                  Searching for Books...
-                </p>
-              )}
+
               {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
               {hasSearched && !isLoading && !error && books.length === 0 && (
                 <p className="mt-4 text-sm text-slate-600">No Books Found.</p>
@@ -101,7 +97,7 @@ function Hero() {
         </div>
       </section>
 
-      <SearchResult books={books} />
+      {!isLoading && !error && <SearchResult books={books} />}
     </>
   );
 }

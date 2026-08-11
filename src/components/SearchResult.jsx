@@ -25,11 +25,14 @@ const SearchResult = ({ books }) => {
 
   return (
     <>
-      <p className="mx-auto max-w-7xl px-6 pt-8 text-sm text-slate-600">
+      <p className="mx-auto max-w-7xl px-4 pt-8 text-sm text-slate-600 sm:px-6">
         Showing {startIndex + 1}-{Math.min(endIndex, books.length)} of{" "}
         {books.length} results.
       </p>
-      <section className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-6 py-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <section
+        aria-label="Search results"
+        className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-4 py-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:px-6"
+      >
         {visibleBooks.map((book) => {
           const isAdded = library.some((item) => item.bookId === book.key);
 
@@ -44,12 +47,12 @@ const SearchResult = ({ books }) => {
         })}
       </section>
       {totalPages > 1 && (
-        <div className="mx-auto flex max-w-7xl items-center justify-center gap-4 px-6 pb-10">
+        <div className="mx-auto flex max-w-7xl items-center justify-center gap-4 px-4 pb-10 sm:px-6">
           <button
             type="button"
             onClick={() => setCurrentPage((page) => page - 1)}
             disabled={currentPage === 1}
-            className="cursor-pointer rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:bg-slate-300"
+            className="cursor-pointer rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:bg-slate-300 disabled:hover:bg-slate-300 transition hover:bg-slate-700"
           >
             Previous
           </button>
@@ -60,7 +63,7 @@ const SearchResult = ({ books }) => {
             type="button"
             onClick={() => setCurrentPage((page) => page + 1)}
             disabled={currentPage === totalPages}
-            className="cursor-pointer rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:bg-slate-300"
+            className="cursor-pointer rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:bg-slate-300 disabled:hover:bg-slate-300 transition hover:bg-slate-700"
           >
             Next
           </button>

@@ -14,32 +14,32 @@ const LibraryBookCard = ({ item }) => {
   } = useContext(LibraryContext);
 
   return (
-    <article className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+    <article className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
       <div className="flex flex-col gap-5 sm:flex-row">
         {item.cover ? (
           <img
             src={`https://covers.openlibrary.org/b/id/${item.cover}-M.jpg`}
             alt={`${item.title} cover`}
-            className="h-40 w-28 rounded-lg object-cover"
+            className="h-40 w-28 rounded-lg object-cover self-center sm:self-start"
           />
         ) : (
-          <div className="flex h-40 w-28 items-center justify-center rounded-lg bg-slate-100 px-2 text-center text-sm text-slate-500">
+          <div className="flex h-40 w-28 items-center justify-center rounded-lg bg-slate-100 px-2 text-center text-sm text-slate-500 self-center sm:self-start">
             No Cover
           </div>
         )}
 
         <div className="flex-1">
           <div className="flex items-start justify-between gap-4">
-            <h2 className="text-xl font-semibold text-slate-900">
+            <h2 className="text-xl font-semibold text-slate-900 min-w-0 break-words">
               <Link
                 to={`/book/${item.bookId.replace("/works/", "")}`}
-                className="cursor-pointer text-blue-600 underline"
+                className="cursor-pointer text-slate-900 transition hover:text-slate-600 hover:underline"
               >
                 {item.title}
               </Link>
             </h2>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 shrink-0">
               <button
                 type="button"
                 onClick={() => handleToggleFavorite(item.bookId)}
@@ -119,7 +119,7 @@ const LibraryBookCard = ({ item }) => {
                 onChange={(event) =>
                   handleStatusChange(item.bookId, event.target.value)
                 }
-                className="mt-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-slate-500"
+                className="mt-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-slate-500 w-full sm:w-auto transition"
               >
                 <option value="want-to-read">Want to Read</option>
                 <option value="reading">Reading</option>

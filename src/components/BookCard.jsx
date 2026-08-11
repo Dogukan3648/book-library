@@ -1,6 +1,8 @@
+import { Link } from "react-router";
+
 function BookCard({ book, onAddToLibrary, isAdded }) {
   return (
-    <div className="group flex h-full flex-col rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
+    <article className="group flex h-full flex-col rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg sm:p-5">
       <div className="overflow-hidden rounded-lg">
         {book.cover ? (
           <img
@@ -16,13 +18,18 @@ function BookCard({ book, onAddToLibrary, isAdded }) {
       </div>
 
       <div className="mb-4">
-        <h2 className="mt-4 text-lg font-semibold text-gray-900">
-          {book.title}
+        <h2 className="mt-4 text-lg font-semibold text-slate-900 break-words">
+          <Link
+            to={`/book/${book.key.replace("/works/", "")}`}
+            className="transition hover:text-slate-600 hover:underline"
+          >
+            {book.title}
+          </Link>
         </h2>
 
-        <p className="mt-2 text-sm text-gray-600">{book.author}</p>
+        <p className="mt-2 text-sm text-slate-600">{book.author}</p>
 
-        <p className="mt-1 text-sm text-gray-500">{book.publishedYear}</p>
+        <p className="mt-1 text-sm text-slate-500">{book.publishedYear}</p>
       </div>
 
       <button
@@ -36,11 +43,12 @@ function BookCard({ book, onAddToLibrary, isAdded }) {
           disabled:cursor-not-allowed
           disabled:bg-emerald-600
           disabled:text-white
+          disabled:hover:bg-emerald-600
         "
       >
         {isAdded ? "✓ Added" : "Add to Library"}
       </button>
-    </div>
+    </article>
   );
 }
 
