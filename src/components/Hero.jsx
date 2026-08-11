@@ -1,21 +1,42 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import libraryImage from "../assets/library.jpg";
-import { LibraryContext } from "../contexts/LibraryContext";
 import { searchBooks } from "../services/openLibrary";
-import BookCard from "./BookCard";
+import SearchResult from "./SearchResult";
 
 function Hero() {
   const [searchTerm, setSearchTerm] = useState("");
   const [books, setBooks] = useState([]);
-  const { library, handleAddToLibrary } = useContext(LibraryContext);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [hasSearched, setHasSearched] = useState(false);
 
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
+    if (error) {
+      setError("");
+    }
   };
 
-  async function handleSearch() {
-    const result = await searchBooks(searchTerm);
-    setBooks(result);
+  async function handleSearch(event) {
+    event.preventDefault();
+    if (!searchTerm.trim()) {
+      setError("Please enter a book title or author.");
+      return;
+    }
+    try {
+      setIsLoading(true);
+      setError("");
+      setHasSearched(true);
+
+      const result = await searchBooks(searchTerm.trim());
+      setBooks(result);
+    } catch (error) {
+      console.error(error);
+      setError("Something went wrong while searching for books.");
+      setBooks([]);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -37,7 +58,10 @@ function Hero() {
                 reading collection in one place.
               </p>
 
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <form
+                onSubmit={handleSearch}
+                className="mt-8 flex flex-col gap-3 sm:flex-row"
+              >
                 <input
                   type="search"
                   placeholder="Search by title or author"
@@ -47,13 +71,23 @@ function Hero() {
                 />
 
                 <button
-                  type="button"
-                  className="cursor-pointer rounded-lg bg-slate-900 px-10 py-3 font-medium text-white transition hover:bg-slate-700"
-                  onClick={handleSearch}
+                  type="submit"
+                  className="cursor-pointer rounded-lg bg-slate-900 px-10 py-3 font-medium 
+                  text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-400"
+                  disabled={isLoading}
                 >
-                  Search
+                  {isLoading ? "Searching..." : "Search"}
                 </button>
-              </div>
+              </form>
+              {isLoading && (
+                <p className="mt-4 text-sm text-slate-600">
+                  Searching for Books...
+                </p>
+              )}
+              {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
+              {hasSearched && !isLoading && !error && books.length === 0 && (
+                <p className="mt-4 text-sm text-slate-600">No Books Found.</p>
+              )}
             </div>
 
             <div>
@@ -67,20 +101,7 @@ function Hero() {
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-6 py-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {books.map((book) => {
-          const isAdded = library.some((item) => item.bookId === book.key);
-
-          return (
-            <BookCard
-              key={book.key}
-              book={book}
-              isAdded={isAdded}
-              onAddToLibrary={handleAddToLibrary}
-            />
-          );
-        })}
-      </section>
+      <SearchResult books={books} />
     </>
   );
 }
