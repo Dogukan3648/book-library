@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { LibraryContext } from "../contexts/LibraryContext";
 import BookCard from "./BookCard";
 
@@ -14,10 +14,6 @@ const SearchResult = ({ books }) => {
   const visibleBooks = books.slice(startIndex, endIndex);
 
   const totalPages = Math.ceil(books.length / booksPerPage);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [books]);
 
   if (books.length === 0) {
     return null;

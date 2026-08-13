@@ -9,6 +9,7 @@ function Hero() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
+  const [searchVersion, setSearchVersion] = useState(0);
 
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
@@ -30,6 +31,7 @@ function Hero() {
 
       const result = await searchBooks(searchTerm.trim());
       setBooks(result);
+      setSearchVersion((version) => version + 1);
     } catch (error) {
       console.error(error);
       setError("Something went wrong while searching for books.");
@@ -97,7 +99,9 @@ function Hero() {
         </div>
       </section>
 
-      {!isLoading && !error && <SearchResult books={books} />}
+      {!isLoading && !error && (
+        <SearchResult key={searchVersion} books={books} />
+      )}
     </>
   );
 }
